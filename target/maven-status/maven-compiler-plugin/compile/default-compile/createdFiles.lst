@@ -1,5 +1,16 @@
+com/example/model/ErrorResponse.class
+com/example/service/AIService$Message.class
+com/example/service/AIService.class
 com/example/App.class
+com/example/verifier/CoffeeMenuItemVerifier.class
+com/example/service/AIService$ChatRequest.class
 com/example/repository/ProductRepository.class
 com/example/config/OpenApiConfig.class
+com/example/service/AIService$Choice.class
+com/example/model/ProductListResponse.class
+com/example/service/AIService$ChatResponse.class
 com/example/controller/ProductController.class
+com/example/verifier/MenuItemValidationResponse.class
+com/example/verifier/MenuItemValidationRequest.class
+com/example/model/ProductRequest.class
 com/example/model/Product.class
