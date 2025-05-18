@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class CoffeeMenuItemVerifier {
+    private static final Logger logger = LoggerFactory.getLogger(CoffeeMenuItemVerifier.class);
     private final AIService aiService;
 
     @Autowired
@@ -17,15 +20,22 @@ public class CoffeeMenuItemVerifier {
     }
 
     public Mono<Boolean> verifyMenuItem(String name) {
-        return aiService.validateProduct(name)
-                .map(result -> {
-                    // Log the response for debugging
-                    System.out.println("AI Service response: " + result);
-                    return result;
+        if (name == null || name.trim().isEmpty()) {
+            logger.warn("Attempted validation with null or empty coffee name");
+            return Mono.just(false);
+        }
+        
+        logger.info("Verifying coffee menu item: '{}'", name);
+        return aiService.validateProduct(name.trim())
+                .doOnNext(result -> {
+                    if (result) {
+                        logger.info("Coffee drink '{}' validated successfully", name);
+                    } else {
+                        logger.info("Coffee drink '{}' failed validation", name);
+                    }
                 })
                 .onErrorResume(e -> {
-                    // Log any errors
-                    System.err.println("Error in AI validation: " + e.getMessage());
+                    logger.error("Error in AI validation: {}", e.getMessage(), e);
                     return Mono.just(false);
                 });
     }

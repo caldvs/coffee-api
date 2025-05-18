@@ -1,5 +1,5 @@
 com/example/App.class
-com/example/controller/ProductController.class
 com/example/repository/ProductRepository.class
 com/example/config/OpenApiConfig.class
+com/example/controller/ProductController.class
 com/example/model/Product.class

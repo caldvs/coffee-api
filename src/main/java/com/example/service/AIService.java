@@ -16,7 +16,12 @@ public class AIService {
     private final WebClient webClient;
     
     public AIService(@Value("${openai.api.key}") String apiKey) {
-        logger.info("Initializing AIService with API key length: {}", apiKey.length());
+        logger.info("Initializing AIService with API key");
+        // Log only first few characters for security
+        if (apiKey != null && apiKey.length() > 4) {
+            logger.debug("API key starts with: {}...", apiKey.substring(0, 4));
+        }
+        
         this.webClient = WebClient.builder()
                 .baseUrl("https://api.openai.com/v1")
                 .defaultHeader("Authorization", "Bearer " + apiKey)
@@ -25,8 +30,22 @@ public class AIService {
     }
     
     public Mono<Boolean> validateProduct(String productName) {
-        String prompt = String.format("Is '%s' a valid coffee drink name? " +
-                "Respond with only 'true' or 'false'.", productName);
+        String prompt = String.format(
+            "You are a coffee expert barista with extensive knowledge of coffee drinks from around the world.\n\n" +
+            "Your task is to determine if the provided name is a legitimate coffee drink, even if it's regional or less common.\n\n" +
+            "Consider the following categories of coffee drinks as valid:\n" +
+            "1. Espresso-based drinks (Espresso, Americano, Long Black, Cappuccino, Latte, Flat White, etc.)\n" +
+            "2. Filter/drip coffee variations (Pour Over, Drip Coffee, etc.)\n" +
+            "3. Cold coffee preparations (Cold Brew, Iced Coffee, etc.)\n" +
+            "4. Regional coffee specialties (Turkish Coffee, Vietnamese Coffee, etc.)\n" +
+            "5. Coffee preparation methods that result in a distinctive drink (French Press, AeroPress, etc.)\n\n" +
+            "Remember that naming conventions may vary by region. For example:\n" +
+            "- 'Long Black' is a common coffee drink in Australia and New Zealand (similar to Americano but prepared differently)\n" +
+            "- 'Flat White' originated in Australia/New Zealand\n" +
+            "- 'Cortado' is popular in Spain and Latin America\n\n" +
+            "Question: Is '%s' a valid coffee drink name?\n\n" +
+            "Respond with ONLY 'true' or 'false' without explanation.", 
+            productName);
         
         logger.debug("Validating product name: {}", productName);
         logger.debug("Using prompt: {}", prompt);

@@ -129,7 +129,37 @@ src/
 4. Push to the branch
 5. Create a Pull Request
 
+## Environment Variables
+
+This project requires an OpenAI API key to function. The key should be stored as a GitHub secret named `OPENAI_API_KEY`.
+
+### Setting up the GitHub Secret
+
+To set up the secret:
+
+1. Go to your GitHub repository
+2. Click on "Settings"
+3. Click on "Secrets and variables" under Security
+4. Click on "Actions"
+5. Click "New repository secret"
+6. Name: `OPENAI_API_KEY`
+7. Value: Your OpenAI API key
+8. Click "Add secret"
+
+The application will automatically use this secret when deployed through GitHub Actions.
+
+### Local Development
+
+For local development, set the environment variable:
+```bash
+export OPENAI_API_KEY=your-api-key-here
+```
+
+Then run the application:
+```bash
+mvn spring-boot:run
+```
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
